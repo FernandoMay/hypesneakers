@@ -1,129 +1,236 @@
+import 'package:flutter/foundation.dart';
+
 class Product {
-  int id;
-  String name;
-  String category;
-  String image;
-  double price;
-  bool isliked;
-  bool isSelected;
-  Product(
-      {required this.id,
-      required this.name,
-      required this.category,
-      required this.price,
-      required this.isliked,
-      this.isSelected = false,
-      required this.image});
+  final String id;
+  final String name;
+  final String brand;
+  final double price;
+  final String description;
+  final List<String> images;
+  final List<String> sizes;
+  final List<String> colors;
+  final String category;
+  final bool isNew;
+  final bool isPopular;
+  final double rating;
+  final int reviewCount;
+  bool isFavorite;
+
+  Product({
+    required this.id,
+    required this.name,
+    required this.brand,
+    required this.price,
+    required this.description,
+    required this.images,
+    required this.sizes,
+    required this.colors,
+    required this.category,
+    this.isNew = false,
+    this.isPopular = false,
+    this.rating = 0.0,
+    this.reviewCount = 0,
+    this.isFavorite = false,
+  });
+
+  String get image => images.first;
+}
+
+class CartItem {
+  final Product product;
+  final String size;
+  final String color;
+  int quantity;
+
+  CartItem({
+    required this.product,
+    required this.size,
+    required this.color,
+    this.quantity = 1,
+  });
+
+  double get total => product.price * quantity;
 }
 
 class Category {
-  int id;
-  String name;
-  String image;
+  final String id;
+  final String name;
+  final String image;
+  final String description;
   bool isSelected;
-  Category(
-      {required this.id,
-      required this.name,
-      this.isSelected = false,
-      required this.image});
+
+  Category({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.description,
+    this.isSelected = false,
+  });
 }
 
-class AppData {
-  static List<Product> productList = [
-    Product(
-        id: 5,
-        name: 'Nike Air Max 200',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: 'assets/shoe_thumb_5.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 6,
-        name: 'Nike Air Max 97',
-        price: 220.00,
-        isliked: false,
-        image: 'assets/shoe_thumb_6.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 7,
-        name: 'Nike Air Max 200',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: 'assets/shoe_thumb_7.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 8,
-        name: 'Nike Air Max 98',
-        price: 210.00,
-        isliked: false,
-        image: 'assets/jacket.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 9,
-        name: 'Nike Air Max 99',
-        price: 290.00,
-        isliked: false,
-        image: 'assets/watch.jpeg',
-        category: "Trending Now"),
-  ];
-  static List<Product> cartList = [
-    Product(
-        id: 1,
-        name: 'Nike Air Max 200',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: 'assets/shoe_thumb_1.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 2,
-        name: 'Nike Air Max 97',
-        price: 190.00,
-        isliked: false,
-        image: 'assets/shoe_thumb_2.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 3,
-        name: 'Nike Air Max 92607',
-        price: 220.00,
-        isliked: false,
-        image: 'assets/shoe_thumb_3.jpeg',
-        category: "Trending Now"),
-    Product(
-        id: 4,
-        name: 'Nike Air Max 200',
-        price: 240.00,
-        isSelected: true,
-        isliked: false,
-        image: 'assets/shoe_thumb_4.jpeg',
-        category: "Trending Now"),
-    // Product(
-    //     id:1,
-    //     name: 'Nike Air Max 97',
-    //     price: 190.00,
-    //     isliked: false,
-    //     image: 'assets/small_tilt_shoe_2.jpeg',
-    //     category: "Trending Now"),
-  ];
-  static List<Category> categoryList = [
-    // Category(),
-    Category(
-        id: 1,
-        name: "Sneakers",
-        image: 'assets/shoe_thumb_6.jpeg',
-        isSelected: true),
-    Category(id: 2, name: "Jacket", image: 'assets/jacket.jpeg'),
-    Category(id: 3, name: "Watch", image: 'assets/watch.jpeg'),
-    Category(id: 4, name: "Watch", image: 'assets/watch.jpeg'),
-  ];
-  static List<String> showThumbnailList = [
-    "assets/shoe_thumb_5.jpeg",
-    "assets/shoe_thumb_1.jpeg",
-    "assets/shoe_thumb_4.jpeg",
-    "assets/shoe_thumb_3.jpeg",
-  ];
-  static String description =
-      "Clean lines, versatile and timeless—the people shoe returns with the Nike Air Max 90. Featuring the same iconic Waffle sole, stitched overlays and classic TPU accents you come to love, it lets you walk among the pantheon of Air. ßNothing as fly, nothing as comfortable, nothing as proven. The Nike Air Max 90 stays true to its OG running roots with the iconic Waffle sole, stitched overlays and classic TPU details. Classic colours celebrate your fresh look while Max Air cushioning adds comfort to the journey.";
+class AppState extends ChangeNotifier {
+  User? _user;
+  final List<Product> _products = [];
+  final List<CartItem> _cart = [];
+  final List<Product> _favorites = [];
+  bool _isLoading = false;
+
+  User? get user => _user;
+  List<Product> get products => List.unmodifiable(_products);
+  List<CartItem> get cart => List.unmodifiable(_cart);
+  List<Product> get favorites => List.unmodifiable(_favorites);
+  bool get isLoading => _isLoading;
+
+  double get cartTotal => _cart.fold(0, (sum, item) => sum + item.total);
+  int get cartItemCount => _cart.fold(0, (sum, item) => sum + item.quantity);
+
+  void loadInitialData() {
+    _products.addAll([
+      Product(
+        id: '1',
+        name: 'Nike Air Max 270',
+        brand: 'Nike',
+        price: 150.0,
+        description: 'The Nike Air Max 270 delivers visible cushioning under every step.',
+        images: [
+          'assets/shoe_thumb_1.jpeg',
+          'assets/shoe_thumb_2.jpeg',
+          'assets/shoe_thumb_3.jpeg',
+        ],
+        sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11'],
+        colors: ['Black', 'White', 'Red'],
+        category: 'Running',
+        isNew: true,
+        isPopular: true,
+        rating: 4.8,
+        reviewCount: 254,
+      ),
+      Product(
+        id: '2',
+        name: 'Nike Air Jordan 1',
+        brand: 'Nike',
+        price: 180.0,
+        description: 'The iconic Air Jordan 1 in a modern interpretation.',
+        images: [
+          'assets/shoe_thumb_4.jpeg',
+          'assets/shoe_thumb_5.jpeg',
+          'assets/shoe_thumb_6.jpeg',
+        ],
+        sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11'],
+        colors: ['Black', 'Red', 'White'],
+        category: 'Lifestyle',
+        isNew: false,
+        isPopular: true,
+        rating: 4.9,
+        reviewCount: 512,
+      ),
+    ]);
+    notifyListeners();
+  }
+
+  void setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  void setUser(User? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  void addToCart(Product product, String size, String color) {
+    final existingItem = _cart.firstWhere(
+      (item) =>
+          item.product.id == product.id &&
+          item.size == size &&
+          item.color == color,
+      orElse: () => CartItem(
+        product: product,
+        size: size,
+        color: color,
+        quantity: 0,
+      ),
+    );
+
+    if (existingItem.quantity == 0) {
+      _cart.add(CartItem(
+        product: product,
+        size: size,
+        color: color,
+      ));
+    } else {
+      existingItem.quantity++;
+    }
+    notifyListeners();
+  }
+
+  void removeFromCart(CartItem item) {
+    _cart.remove(item);
+    notifyListeners();
+  }
+
+  void updateCartItemQuantity(CartItem item, int quantity) {
+    if (quantity < 1) {
+      removeFromCart(item);
+    } else {
+      item.quantity = quantity;
+      notifyListeners();
+    }
+  }
+
+  void toggleFavorite(Product product) {
+    product.isFavorite = !product.isFavorite;
+    if (product.isFavorite) {
+      _favorites.add(product);
+    } else {
+      _favorites.remove(product);
+    }
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _cart.clear();
+    notifyListeners();
+  }
+}
+
+class User {
+  final String id;
+  final String email;
+  final String name;
+  final String? photoUrl;
+  final List<String> favoriteIds;
+  final List<Address> addresses;
+
+  User({
+    required this.id,
+    required this.email,
+    required this.name,
+    this.photoUrl,
+    List<String>? favoriteIds,
+    List<Address>? addresses,
+  })  : favoriteIds = favoriteIds ?? [],
+        addresses = addresses ?? [];
+}
+
+class Address {
+  final String id;
+  final String name;
+  final String street;
+  final String city;
+  final String state;
+  final String zipCode;
+  final String country;
+  final bool isDefault;
+
+  Address({
+    required this.id,
+    required this.name,
+    required this.street,
+    required this.city,
+    required this.state,
+    required this.zipCode,
+    required this.country,
+    this.isDefault = false,
+  });
 }
