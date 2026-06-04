@@ -227,7 +227,7 @@ class _AuthPageState extends State<AuthPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        CupertinoIcons.apple_logo,
+                        CupertinoIcons.profile_circled,
                         color: AppColors.cardBackground,
                       ),
                       const SizedBox(width: 8),
