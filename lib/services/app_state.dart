@@ -9,7 +9,7 @@ class AppState extends ChangeNotifier {
   
   User? _user;
   List<Product> _products = [];
-  List<CartItem> _cart = [];
+  final List<CartItem> _cart = [];
   List<Product> _favorites = [];
   bool _isLoading = false;
   bool _isInitialized = false;

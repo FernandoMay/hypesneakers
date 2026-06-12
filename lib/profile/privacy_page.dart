@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import '../styles.dart';
-import '../services/app_state.dart';
-import 'package:provider/provider.dart';
 
 class PrivacyPage extends StatefulWidget {
   const PrivacyPage({super.key});
@@ -192,7 +190,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
               CupertinoSwitch(
                 value: value,
                 onChanged: onChanged,
-                activeColor: AppColors.accent,
+                activeTrackColor: AppColors.accent,
               ),
             ],
           ),

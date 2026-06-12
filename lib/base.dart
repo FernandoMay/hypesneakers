@@ -138,7 +138,7 @@ class _BaseState extends State<Base> {
                   gradient: LinearGradient(
                     colors: [
                       AppColors.background,
-                      AppColors.background.withOpacity(0.8),
+                      AppColors.background.withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -251,7 +251,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             boxShadow: [
               if (isSelected)
                 BoxShadow(
-                  color: AppColors.accent.withOpacity(0.3),
+                  color: AppColors.accent.withValues(alpha: 0.3),
                   blurRadius: 10,
                   spreadRadius: 5,
                 ),

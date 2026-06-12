@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import '../styles.dart';
-import '../services/app_state.dart';
-import 'package:provider/provider.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -152,7 +150,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               CupertinoSwitch(
                 value: value,
                 onChanged: onChanged,
-                activeColor: AppColors.accent,
+                activeTrackColor: AppColors.accent,
               ),
             ],
           ),

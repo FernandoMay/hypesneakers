@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: AppColors.textLight.withOpacity(0.1),
+                color: AppColors.textLight.withValues(alpha: 0.1),
                 borderRadius: AppTheme.borderRadius,
               ),
               child: CupertinoTextField(

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -28,18 +29,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: 'Hype Sneakers',
-      theme: CupertinoThemeData(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
-        barBackgroundColor: AppColors.cardBackground,
-        textTheme: CupertinoTextThemeData(
-          primaryColor: AppColors.textPrimary,
-          textStyle: AppTextStyles.bodyMedium,
+    return MaterialApp(
+      title: 'HypeSneakers',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF7C4DFF),
         ),
       ),
-      debugShowCheckedModeBanner: false,
       home: Consumer<AppState>(
         builder: (context, appState, child) {
           if (!appState.isInitialized) {
@@ -120,7 +118,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();

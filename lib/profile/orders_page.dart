@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import '../styles.dart';
-import '../services/app_state.dart';
-import 'package:provider/provider.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -117,8 +115,8 @@ class OrderItem extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: status == 'Delivered'
-                      ? AppColors.success.withOpacity(0.1)
-                      : AppColors.primary.withOpacity(0.1),
+                      ? AppColors.success.withValues(alpha: 0.1)
+                      : AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(

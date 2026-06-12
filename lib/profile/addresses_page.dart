@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import '../styles.dart';
 import '../services/app_state.dart';
-import '../models.dart';
+import '../models.dart' hide AppState;
 import 'package:provider/provider.dart';
 
 class AddressesPage extends StatelessWidget {
@@ -24,8 +24,8 @@ class AddressesPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            if (appState.user?.address != null)
-              _AddressCard(address: appState.user!.address!)
+            if (appState.user != null && appState.user!.addresses.isNotEmpty)
+              _AddressCard(address: appState.user!.addresses.first)
             else
               Container(
                 padding: const EdgeInsets.all(16),
@@ -105,6 +105,8 @@ class AddressesPage extends StatelessWidget {
               child: const Text('Save'),
               onPressed: () async {
                 final address = Address(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  name: 'Home',
                   street: streetController.text,
                   city: cityController.text,
                   state: stateController.text,
