@@ -6,7 +6,7 @@ import 'styles.dart';
 import 'models.dart';
 
 class Base extends StatefulWidget {
-  const Base({Key? key, required this.title}) : super(key: key);
+  const Base({super.key, required this.title});
 
   final String title;
 
@@ -179,8 +179,7 @@ class _BaseState extends State<Base> {
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onIconPresedCallback;
-  const CustomBottomNavigationBar({Key? key, required this.onIconPresedCallback})
-      : super(key: key);
+  const CustomBottomNavigationBar({super.key, required this.onIconPresedCallback});
 
   @override
   _CustomBottomNavigationBarState createState() =>

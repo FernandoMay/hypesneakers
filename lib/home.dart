@@ -5,7 +5,7 @@ import 'styles.dart';
 import 'product.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key, required this.title}) : super(key: key);
+  const Home({super.key, required this.title});
 
   final String title;
 
